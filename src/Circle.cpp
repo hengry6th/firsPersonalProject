@@ -34,7 +34,7 @@ bool Circle::goThrough(double x_in, double y_in)
 	return pow(x_in - x,2) + pow(y_in - y,2) == r2;
 }
 
-void Circle::cross(Geo* g, int* p_count)
+void Circle::cross(Geo* g, unordered_set<Point, PointHash, PointCmp>* set)
 {
 	if (g->getType() == 'L') {
 		double A = ((Line*)g)->getA();
@@ -47,26 +47,17 @@ void Circle::cross(Geo* g, int* p_count)
 			double temp_x = (C2 * B - C * A) / (A * A + B * B);
 			double temp_y = (C2 * A - C * B) / (A * A + B * B);
 			if (s == 0) {
-				pair<double, double> p(temp_x, temp_y);
-				g->addPointOnly(p);
-				if (addPoint(p)) {
-					(*p_count)++;
-				}
+				struct Point p{ temp_x, temp_y };
+				(*set).insert(p);
 			}
 			else {
 				double l = sqrt(s);
 				double ex = ((Line*)g)->getEx();
 				double ey = ((Line*)g)->getEy();
-				pair<double, double> p1(temp_x + ex * l, temp_y + ex * l);
-				g->addPointOnly(p1);
-				if (addPoint(p1)) {
-					(*p_count)++;
-				}
-				pair<double, double> p2(temp_x - ex * l, temp_y - ex * l);
-				g->addPointOnly(p2);
-				if (addPoint(p2)) {
-					(*p_count)++;
-				}
+				struct Point p1 { temp_x + ex * l, temp_y + ex * l };
+				(*set).insert(p1);
+				struct Point p2 { temp_x - ex * l, temp_y - ex * l };
+				(*set).insert(p2);
 			}
 		}
 	}
@@ -89,41 +80,26 @@ void Circle::cross(Geo* g, int* p_count)
 			double y0 = y + a / d * ((double)y2 - y);
 			double cx = h / d * ((double)y2 - y);
 			double cy = h / d * ((double)x2 - x);
-			pair<double, double>p1(x0 - cx, y0 - cy);
-			g->addPointOnly(p1);
-			if (addPoint(p1)) {
-				(*p_count)++;
-			}
-			pair<double, double>p2(x0 + cx, y0 + cy);
-			g->addPointOnly(p2);
-			if (addPoint(p2)) {
-				(*p_count)++;
-			}
+			struct Point p1 { x0 - cx, y0 - cy };
+			(*set).insert(p1);
+			struct Point p2 { x0 + cx, y0 + cy };
+			(*set).insert(p2);
 		}
 		else if (d2 == l1) {
 			double d = sqrt(d2);
 			if (r < R) {
-				pair<double, double>p(x + ((double)x - x2) * r / d, y + ((double)y - y2) * r / d);
-				g->addPointOnly(p);
-				if (addPoint(p)) {
-					(*p_count)++;
-				}
+				struct Point p { x + ((double)x - x2) * r / d, y + ((double)y - y2) * r / d };
+				(*set).insert(p);
 			}
 			else {
-				pair<double, double>p(x2 + ((double)x2 - x) * R / d, y2 + ((double)y2 - y) * R / d);
-				g->addPointOnly(p);
-				if (addPoint(p)) {
-					(*p_count)++;
-				}
+				struct Point p { x2 + ((double)x2 - x) * R / d, y2 + ((double)y2 - y) * R / d};
+				(*set).insert(p);
 			}
 		}
 		else if (d2 == l2) {
 			double d = sqrt(d2);
-			pair<double, double>p(x + ((double)x2 - x) * r / d, y + ((double)y2 - y) * r / d);
-			g->addPointOnly(p);
-			if (addPoint(p)) {
-				(*p_count)++;
-			}
+			struct Point p { x + ((double)x2 - x) * r / d, y + ((double)y2 - y) * r / d };
+			(*set).insert(p);
 		}
 	}
 }

@@ -16,5 +16,5 @@ public:
 	int getR();
 	double getR2();
 	bool goThrough(double x_in, double y_in);
-	void cross(Geo* g, int* p_count);
+	void cross(Geo* g, unordered_set<Point, PointHash, PointCmp>* set);
 };

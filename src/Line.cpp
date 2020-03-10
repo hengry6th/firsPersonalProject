@@ -1,7 +1,7 @@
 #include "Line.h"
 #include"Circle.h"
 #include <cmath>
-#include"point.h"
+//#include"point.h"
 
 Line::Line(int id_in, int x1_in, int y1_in, int x2_in, int y2_in)
 {
@@ -51,7 +51,7 @@ bool Line::goThrough(double x, double y)
 	return A * x + B * y + C == 0;
 }
 
-void Line::cross(Geo* g, int* p_count)
+void Line::cross(Geo* g, unordered_set<Point, PointHash, PointCmp>* set)
 {
 	if (g->getType() == 'L') {
 		double A2 = ((Line*)g)->getA();
@@ -60,11 +60,8 @@ void Line::cross(Geo* g, int* p_count)
 		if (A * B2 != B * A2) {
 			double temp_x = (C2 * B - C * B2) / (A * B2 - A2 * B);
 			double temp_y = (C2 * A - C * A2) / (B * A2 - B2 * A);
-			pair<double, double> p(temp_x,temp_y);
-			g->addPointOnly(p);
-			if (addPoint(p)) {
-				(*p_count)++;
-			}
+			struct Point p { temp_x, temp_y };
+			(*set).insert(p);
 		}
 	} else{
 		double x = ((Circle*)g)->getX();
@@ -76,30 +73,22 @@ void Line::cross(Geo* g, int* p_count)
 			double temp_x = (C2 * B - C * A) / (A * A + B * B);
 			double temp_y = (C2 * A - C * B) / (A * A + B * B);
 			if (s == 0) {
-				pair<double, double> p(temp_x, temp_y);
-				g->addPointOnly(p);
-				if (addPoint(p)) {
-					(*p_count)++;
-				}
+				struct Point  p { temp_x, temp_y };
+				(*set).insert(p);
 			}
 			else {
 				double l = sqrt(s);
 				double ex = ((Line*)g)->getEx();
 				double ey = ((Line*)g)->getEy();
-				pair<double, double> p1(temp_x + ex * l, temp_y + ex * l);
-				g->addPointOnly(p1);
-				if (addPoint(p1)) {
-					(*p_count)++;
-				}
-				pair<double, double> p2(temp_x - ex * l, temp_y - ex * l);
-				g->addPointOnly(p2);
-				if (addPoint(p2)) {
-					(*p_count)++;
-				}
+				struct Point  p1 { temp_x + ex * l, temp_y + ex * l };
+				(*set).insert(p1);
+				struct Point p2 { temp_x - ex * l, temp_y - ex * l };
+				(*set).insert(p1);
 			}
 		}
 	}
 }
+/*
 
 void Line::cross(Line* l, vector<Point>* points, int* p_count)
 {
@@ -116,7 +105,7 @@ void Line::cross(Line* l, vector<Point>* points, int* p_count)
 		(*points).push_back(p);
 	}
 }
-
+*/
 
 double Line::getEx()
 {

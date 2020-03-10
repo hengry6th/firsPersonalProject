@@ -2,12 +2,12 @@
 #include<vector>
 #include"Line.h"
 #include"Circle.h"
-#include"point.h"
 #include"Geo.h"
 #include<iostream>
 #include<fstream>
+#include<unordered_set>
 using namespace std;
-int main(int argc, char* argv[])
+int main(/*int argc, char* argv[]*/)
 {
     int n;
     int count = 0;
@@ -15,12 +15,11 @@ int main(int argc, char* argv[])
     vector<Geo*> geos;
     ifstream in_file;
     ofstream out_file;
-    in_file.open(argv[2]);
-    out_file.open(argv[4]);
+    in_file.open(/*argv[2]*/"D:\\QNMDGIT\\firsPersonalProject\\src\\input.txt");
+    out_file.open(/*argv[4]*/"D:\\QNMDGIT\\firsPersonalProject\\src\\output.txt");
     in_file >> n;
     int x1, y1, x2, y2;
     char c;
-    Geo* g;
     for (int i = 0; i < n; i++) {
         in_file >> c;
         if (c == 'L') {
@@ -37,24 +36,12 @@ int main(int argc, char* argv[])
             geos.push_back(new Circle('C', i, x1, y1, x2));
         }
     }
+    std::unordered_set<Point, PointHash, PointCmp> set;
     if (c_count == 0) {
-        vector<Point> points;
-        vector<int> linesID;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < count;j++) {
-                if (geos[i]->goThrough(points[j].getX(), points[j].getY())) {
-                    points[j].releaseID(&linesID);
-                    points[j].addId(i);
-                }
-            }
+        for (int i = 1; i < n; i++) {
             for (int j = 0; j < i; j++) {
-                if (linesID[j] == 0) {
-                    linesID[j] = 1;
-                    continue;
-                }
-                ((Line*)geos[j])->cross((Line*)geos[i], &points, &count);
+                ((Line*)geos[j])->cross((Line*)geos[i], &set);
             }
-            linesID.push_back(1);
         }
     }
     else {
@@ -63,9 +50,9 @@ int main(int argc, char* argv[])
                     ((Line*)geos[i])->preComput();
                 }
                 for (int j = 0; j < i; j++) {
-                    geos[j]->cross(geos[i],&count);
+                    geos[j]->cross(geos[i],&set);
                 }
             }
     }
-    out_file << count << endl;
+    out_file << set.size() << endl;
 }

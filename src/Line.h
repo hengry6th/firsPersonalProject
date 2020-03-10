@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "Geo.h"
-#include"point.h"
+//#include"point.h"
 using std::string;
 using std::pair;
 class Line: public Geo
@@ -21,8 +21,8 @@ public:
 	double getC();
 	double getSq();
 	bool goThrough(double x, double y);
-	void cross(Geo* g, int* p_count);
-	void cross(Line* l, vector<Point>* points, int* p_count);
+	void cross(Geo* g, unordered_set<Point, PointHash, PointCmp>* set);
+	//void cross(Line* l, vector<Point>* points, int* p_count);
 	double getEx();
 	double getEy();
 };

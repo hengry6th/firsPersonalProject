@@ -15,7 +15,7 @@ int Geo::getID()
 {
 	return id;
 }
-
+/*
 bool Geo::addPoint(pair<double, double> p_in)
 {
 	for (auto iter : intersecs)
@@ -32,3 +32,5 @@ void Geo::addPointOnly(pair<double, double> p_in)
 {
 	intersecs.push_back(p_in);
 }
+*/
+

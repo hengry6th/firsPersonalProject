@@ -1,0 +1,4 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets(1875,5): warning : The referenced project '..\jiaoDian\jiaoDian.vcxproj' does not exist.
+  UnitTest1.cpp
+    正在创建库 D:\qnmdC\SE\homework1\src\Debug\UnitTest1.lib 和对象 D:\qnmdC\SE\homework1\src\Debug\UnitTest1.exp
+  UnitTest1.vcxproj -> D:\qnmdC\SE\homework1\src\Debug\UnitTest1.dll
