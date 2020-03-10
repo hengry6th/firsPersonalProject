@@ -7,7 +7,7 @@
 #include<fstream>
 #include<unordered_set>
 using namespace std;
-int main(/*int argc, char* argv[]*/)
+int main(int argc, char* argv[])
 {
     int n;
     int count = 0;
@@ -15,8 +15,8 @@ int main(/*int argc, char* argv[]*/)
     vector<Geo*> geos;
     ifstream in_file;
     ofstream out_file;
-    in_file.open(/*argv[2]*/"D:\\QNMDGIT\\firsPersonalProject\\src\\input.txt");
-    out_file.open(/*argv[4]*/"D:\\QNMDGIT\\firsPersonalProject\\src\\output.txt");
+    in_file.open(argv[2]/*"D:\\QNMDGIT\\firsPersonalProject\\src\\input.txt"*/);
+    out_file.open(argv[4]/*"D:\\QNMDGIT\\firsPersonalProject\\src\\output.txt"*/);
     in_file >> n;
     int x1, y1, x2, y2;
     char c;

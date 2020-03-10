@@ -75,9 +75,9 @@ void Circle::cross(Geo* g, unordered_set<Point, PointHash, PointCmp>* set)
 		if (d2 > l1&& d2 < l2) {
 			double d = sqrt(d2);
 			double s1 = (r2 - ((Circle*)g)->getR2() + d2) / 2 * d;
-			double h = sqrt(r2 - a*a);
-			double x0 = x + a / d * ((double)x2 - x);
-			double y0 = y + a / d * ((double)y2 - y);
+			double h = sqrt(r2 - s1*s1);
+			double x0 = x + s1 / d * ((double)x2 - x);
+			double y0 = y + s1 / d * ((double)y2 - y);
 			double cx = h / d * ((double)y2 - y);
 			double cy = h / d * ((double)x2 - x);
 			struct Point p1 { x0 - cx, y0 - cy };
