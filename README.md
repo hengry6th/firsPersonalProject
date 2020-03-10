@@ -1,4 +1,4 @@
-# firsPersonalProject
+# firstPersonalProject
 The first personal project of 2020 BUAA Software Engineering.
 # 使用方法
 
@@ -8,17 +8,47 @@ input.txt是输入文件路径，output.txt是输出结果的路径
 
 ## 类
 
+v0.2版本，重构数据结构，删除point类，使用unordered_set进行交点的管理，现在以struct point的形式存放交点
+
 #### Geo 
 
 性质：抽象父类，下含Line直线类和Circle圆类；
+
+##### 结构
+
+struct Point {
+
+double x;
+
+double y;
+
+}
+
+存放交点的结构
+
+struct PointHash 
+{
+	size_t operator()(const Point& p) const {
+		return hash\<double\>()(p.x) ^ hash\<double\>()(p.y);
+	}
+};
+
+用来计算结构point的hash值
+
+struct PointCmp
+{
+	bool operator()(const Point& p1, const Point& p2) const {
+		return p1.x == p2.x && p1.y == p2.y;
+	}
+};
+
+用来判断两个结构是否相等
 
 ##### 属性：
 
 int id：序号标识
 
 char type: 区分直线和圆
-
-vector<pair<double, double> > intersecs： 该图形上的交点集，由于后续查找是否有重合的点。
 
 ##### 方法：
 
@@ -38,21 +68,6 @@ int getID();
 
 功能：读取图的id；
 
-bool addPoint(pair<double, double> p_in);
-功能：查询交点集中是否有输入的点p_in，如果没有则将其加入交点集中。
-
-输入：交点p_in
-
-输出：若交点集中存在该点则输出false，表示插入失败，否则输出true，表示插入成功。
-
-void addPointOnly(pair<double, double> p_in);
-
-功能：直接将输入的点插入交点集中，不检查是否存在。
-
-输入：交点p_in
-
-输出：无
-
 virtual bool goThrough(double x, double y)=0;
 
 功能： 判断该图形是否经过输入的点（x，y），接口;
@@ -61,11 +76,11 @@ virtual bool goThrough(double x, double y)=0;
 
 输出：如果经过该点则输出true，否则输出false;
 
-virtual void cross(Geo* g, int* p_count)=0;
+virtual void cross(Geo* g, unordered_set<Point,PointHash, PointCmp> *set)=0;
 
-功能：判断当前图形与输入图形是否相交，如果相交则将交点保存在intersecs中，使计数增加；
+功能：判断当前图形与输入图形是否相交，如果相交则将交点保存在点集set中；
 
-输入：图形geo的指针p，指向计数的变量的指针p_count；
+输入：图形geo的指针\*p，指向点集set的指针\*set；
 
 输出：无；
 
@@ -124,17 +139,10 @@ bool goThrough(double x, double y);
 
 输出：过该点则输出true，否则输出false；
 
-void cross(Geo* g, int* p_count);
-功能：从父类继承的接口，用来计算与输入的指针g所指向的图形的交点，并改变计数
+void cross(Geo* g, unordered_set<Point,PointHash, PointCmp> *set;
+功能：从父类继承的接口，用来计算与输入的指针g所指向的图形的交点，并加入点集中
 
 输入: 指向图形的指针g，指向计数的变量的指针p_count;
-
-输出：无
-
-void cross(Line* l, vector\<Point\>* points, int* p_count);
-功能：重载，用来计算与输入的指针l所指向的直线的交点，将其加入到点集points中，并改变计数
-
-输入: 指向直线的指针l，指向点集的指针points，指向计数的变量的指针p_count;
 
 输出：无
 
@@ -187,48 +195,6 @@ bool goThrough(double x, double y)；
 
 输入：点横坐标x，纵坐标y；
 
-void cross(Geo* g, int* p_count);
+void cross(Geo* g, unordered_set<Point,PointHash, PointCmp> *set);
 
-功能：对父类方法的实现，计算与输入的指针p所指向的图形的交点，并改变p_count所指向的计数变量的值
-
-
-
-#### Point
-
-点类
-
-##### 属性：
-
-double x：横坐标
-
-double y：纵坐标
-
-vector\<int\> linesID：过该点的直线的id；
-
-##### 方法：
-
-Point(double x_in, double y_in);
-
-功能：构造函数，保存输入的横纵坐标
-
-输入：横坐标x_in, 纵坐标y_in；
-
-double getX();
-
-功能：读取横坐标
-
-double getY();
-
-功能：读取纵坐标
-
-void addId(int id);
-
-功能：将输入的id添加到linesID中；
-
-输入：要添加的直线的id
-
-void releaseID(vector\<int\>* lines);
-
-功能：lines是标记数组，lines[i]=0表示id=i的直线不需要被计算。这个函数是用来将lines上过该点的直线的标记位记为0，从而达到剪枝的目的。
-
-输入：指向lines的指针。
+功能：对父类方法的实现，计算与输入的指针p所指向的图形的交点，并将交点加入点集set
