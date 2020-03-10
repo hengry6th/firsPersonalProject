@@ -101,15 +101,16 @@ void Circle::cross(Geo* g, int* p_count)
 			}
 		}
 		else if (d2 == l1) {
+			double d = sqrt(d2);
 			if (r < R) {
-				pair<double, double>p(x + ((double)x - x2) * r / d2, y + ((double)y - y2) * r / d2);
+				pair<double, double>p(x + ((double)x - x2) * r / d, y + ((double)y - y2) * r / d);
 				g->addPointOnly(p);
 				if (addPoint(p)) {
 					(*p_count)++;
 				}
 			}
 			else {
-				pair<double, double>p(x2 + ((double)x2 - x) * R / d2, y2 + ((double)y2 - y) * R / d2);
+				pair<double, double>p(x2 + ((double)x2 - x) * R / d, y2 + ((double)y2 - y) * R / d);
 				g->addPointOnly(p);
 				if (addPoint(p)) {
 					(*p_count)++;
@@ -117,7 +118,8 @@ void Circle::cross(Geo* g, int* p_count)
 			}
 		}
 		else if (d2 == l2) {
-			pair<double, double>p(x + ((double)x2 - x) * r / d2, y + ((double)y2 - y) * r / d2);
+			double d = sqrt(d2);
+			pair<double, double>p(x + ((double)x2 - x) * r / d, y + ((double)y2 - y) * r / d);
 			g->addPointOnly(p);
 			if (addPoint(p)) {
 				(*p_count)++;
